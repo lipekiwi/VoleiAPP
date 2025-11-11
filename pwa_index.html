@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Vôlei App</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#5B2E8A" />
+
+  <!-- Icons (podem ser trocados por versões reais) -->
+  <link rel="icon" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="icon" sizes="512x512" href="icons/icon-512.png" />
+
+  <style>
+    body { font-family: Arial, sans-serif; background: #FAF8FF; margin: 0; padding: 0; }
+    header { background: #5B2E8A; padding: 20px; color: white; text-align:center; }
+    main { padding: 16px; max-width: 800px; margin: auto; }
+    .card { background: white; padding: 14px; border-radius: 10px; margin-bottom: 14px; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Vôlei PWA — Ponteiro</h1>
+  <p>Salto • Explosão • Força</p>
+</header>
+
+<main>
+  <div class="card">
+    <h2>App Instalável</h2>
+    <p>Este app pode ser instalado no seu celular como aplicativo nativo.</p>
+  </div>
+
+  <div class="card">
+    <h2>Treino Semanal</h2>
+    <ul>
+      <li><strong>Segunda:</strong> Lower Explosivo</li>
+      <li><strong>Terça:</strong> Pelada</li>
+      <li><strong>Quarta:</strong> Upper Força</li>
+      <li><strong>Quinta:</strong> Treino Equipe</li>
+      <li><strong>Sexta:</strong> Pelada</li>
+      <li><strong>Sábado:</strong> Lower Força</li>
+      <li><strong>Domingo:</strong> Upper Leve + Core</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Progresso</h2>
+    <p>Gráficos e evolução corporal podem ser adicionados aqui.</p>
+  </div>
+</main>
+
+<script>
+// Registro do Service Worker (PWA)
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("service-worker.js").then(() => {
+      console.log("Service Worker registrado com sucesso.");
+    });
+  });
+}
+</script>
+
+</body>
+</html>

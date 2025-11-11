@@ -3,65 +3,72 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Vôlei App</title>
-
-  <!-- PWA Manifest -->
+  <title>VôleiApp — Treinos</title>
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#5B2E8A" />
-
-  <!-- Icons (podem ser trocados por versões reais) -->
+  <link rel="stylesheet" href="app.css" />
   <link rel="icon" sizes="192x192" href="icons/icon-192.png" />
-  <link rel="icon" sizes="512x512" href="icons/icon-512.png" />
-
-  <style>
-    body { font-family: Arial, sans-serif; background: #FAF8FF; margin: 0; padding: 0; }
-    header { background: #5B2E8A; padding: 20px; color: white; text-align:center; }
-    main { padding: 16px; max-width: 800px; margin: auto; }
-    .card { background: white; padding: 14px; border-radius: 10px; margin-bottom: 14px; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
-  </style>
 </head>
 <body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand"><span class="logo">🏐</span> VôleiApp</div>
+      <button id="openProfile" class="btn small">Perfil</button>
+    </header>
 
-<header>
-  <h1>Vôlei PWA — Ponteiro</h1>
-  <p>Salto • Explosão • Força</p>
-</header>
+    <main class="container">
+      <section class="card" id="todayCard">
+        <h2>Meu Treino de Hoje</h2>
+        <div id="dayLabel" class="muted"></div>
+        <div id="exList"></div>
+        <div class="progressWrap"><div id="progBar" class="prog"></div></div>
+        <div class="controls"><button id="startBtn">Começar treino</button>
+        <button id="clearDay" class="btn ghost">Limpar</button></div>
+      </section>
 
-<main>
-  <div class="card">
-    <h2>App Instalável</h2>
-    <p>Este app pode ser instalado no seu celular como aplicativo nativo.</p>
+      <section class="card">
+        <h3>Calendário Semanal</h3>
+        <div id="weekGrid" class="weekgrid"></div>
+      </section>
+
+      <section class="card">
+        <h3>Progresso</h3>
+        <canvas id="chartJump" height="120"></canvas>
+        <canvas id="chartStrength" height="120" style="margin-top:8px"></canvas>
+      </section>
+
+      <section class="card">
+        <h3>Checklist Rápido</h3>
+        <div id="quickChecklist"></div>
+      </section>
+    </main>
+
+    <nav class="bottombar">
+      <button data-view="home" class="active">Home</button>
+      <button data-view="history">Histórico</button>
+      <button data-view="profile">Perfil</button>
+    </nav>
+
+    <!-- Modals / hidden pages -->
+    <div id="profileModal" class="modal hidden">
+      <div class="modalCard">
+        <h3>Perfil</h3>
+        <label>Nome <input id="inpName" placeholder="Seu nome"></label>
+        <label>Altura (cm) <input id="inpHeight" type="number"></label>
+        <label>Posição <input id="inpRole" value="Ponteiro"></label>
+        <div class="controls"><button id="saveProfile">Salvar</button><button id="closeProfile" class="btn ghost">Fechar</button></div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
   </div>
 
-  <div class="card">
-    <h2>Treino Semanal</h2>
-    <ul>
-      <li><strong>Segunda:</strong> Lower Explosivo</li>
-      <li><strong>Terça:</strong> Pelada</li>
-      <li><strong>Quarta:</strong> Upper Força</li>
-      <li><strong>Quinta:</strong> Treino Equipe</li>
-      <li><strong>Sexta:</strong> Pelada</li>
-      <li><strong>Sábado:</strong> Lower Força</li>
-      <li><strong>Domingo:</strong> Upper Leve + Core</li>
-    </ul>
-  </div>
-
-  <div class="card">
-    <h2>Progresso</h2>
-    <p>Gráficos e evolução corporal podem ser adicionados aqui.</p>
-  </div>
-</main>
-
-<script>
-// Registro do Service Worker (PWA)
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("service-worker.js").then(() => {
-      console.log("Service Worker registrado com sucesso.");
-    });
-  });
-}
-</script>
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js').then(()=>console.log('sw ok')).catch(e=>console.log('sw fail',e));
+    }
+  </script>
 </body>
 </html>

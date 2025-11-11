@@ -1,42 +1,24 @@
-// Service Worker para PWA do treino de Vôlei
-// Cache básico + funcionamento offline
 
-const CACHE_NAME = "volei-app-cache-v1";
+const CACHE_NAME = 'volei-smart-cache-v1';
 const FILES_TO_CACHE = [
-  "./index.html",
-  "./manifest.json",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png"
+  './index.html',
+  './app.css',
+  './app.js',
+  './manifest.json',
+  './icons/icon-192.png',
+  './icons/icon-512.png'
 ];
 
-// Instalação do Service Worker
-tself.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(FILES_TO_CACHE);
-    })
-  );
+self.addEventListener('install', (evt) => {
+  evt.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(FILES_TO_CACHE)));
+  self.skipWaiting();
 });
 
-// Ativação e limpeza de caches antigos
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE_NAME) return caches.delete(key);
-        })
-      );
-    })
-  );
+self.addEventListener('activate', (evt) => {
+  evt.waitUntil(caches.keys().then((keys) => Promise.all(keys.map(k => { if(k !== CACHE_NAME) return caches.delete(k); }))));
   self.clients.claim();
 });
 
-// Interceptação das requisições para funcionamento offline
-self.addEventListener("fetch", (event) => {
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request);
-    })
-  );
+self.addEventListener('fetch', (evt) => {
+  evt.respondWith(caches.match(evt.request).then((res) => res || fetch(evt.request)));
 });

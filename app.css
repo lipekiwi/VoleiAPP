@@ -1,0 +1,33 @@
+
+:root{
+  --primary:#5B2E8A;
+  --accent:#FFD400;
+  --bg:#FAF8FF;
+  --card:#fff;
+  --muted:#6b6b6b;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter, system-ui, Arial, sans-serif;background:linear-gradient(180deg,var(--bg),#fff);color:#111}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:14px;background:linear-gradient(90deg,var(--primary),#3a1f5a);color:white}
+.brand{font-weight:800;font-size:18px;display:flex;gap:8px;align-items:center}
+.container{max-width:900px;margin:14px auto;padding:0 12px;display:grid;grid-template-columns:1fr;gap:12px}
+.card{background:var(--card);padding:12px;border-radius:12px;box-shadow:0 10px 24px rgba(91,46,138,0.06)}
+.muted{color:var(--muted);font-size:13px}
+.weekgrid{display:flex;gap:8px;flex-wrap:wrap}
+.day{flex:1;min-width:110px;padding:10px;border-radius:10px;background:linear-gradient(180deg,rgba(91,46,138,0.05),transparent)}
+.day strong{display:block}
+.controls{display:flex;gap:8px;margin-top:10px}
+.btn{background:var(--primary);color:white;border:none;padding:8px 10px;border-radius:10px;cursor:pointer}
+.btn.ghost{background:transparent;border:1px solid #ddd;color:var(--muted)}
+.btn.small{padding:6px 8px;font-size:13px}
+.progressWrap{background:#f1f1f1;border-radius:10px;padding:6px;margin-top:8px}
+.prog{height:10px;background:linear-gradient(90deg,var(--primary),var(--accent));width:0%;border-radius:8px;transition:width .3s}
+.bottombar{position:fixed;left:12px;right:12px;bottom:14px;background:rgba(255,255,255,0.95);display:flex;gap:8px;padding:8px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.08);justify-content:space-around}
+.bottombar button{background:transparent;border:none;color:var(--muted);font-weight:700}
+.bottombar button.active{color:var(--primary)}
+.weekgrid .day.done{background:linear-gradient(90deg,var(--accent),#fff)}
+.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.35)}
+.hidden{display:none}
+.modalCard{background:white;padding:16px;border-radius:12px;width:90%;max-width:420px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:100px;background:#222;color:white;padding:8px 12px;border-radius:8px}
+.quick-item{display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #eee}

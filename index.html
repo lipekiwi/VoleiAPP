@@ -14,12 +14,14 @@
   </header>
 
   <main id="content">
+    <!-- HOME -->
     <section id="homeSection" class="active">
       <h2>🏐 Bem-vindo ao seu app de treino!</h2>
       <p>Visualize seu progresso, acompanhe seus treinos e melhore sua impulsão.</p>
     </section>
 
-    <section id="treinosSection">
+    <!-- TREINOS -->
+    <section id="treinosSection" class="hidden">
       <h2>Treino da Semana</h2>
       <div id="treinoDia">
         <p>Hoje é <strong><span id="diaAtual"></span></strong></p>
@@ -29,7 +31,8 @@
       </div>
     </section>
 
-    <section id="historicoSection">
+    <!-- HISTÓRICO -->
+    <section id="historicoSection" class="hidden">
       <h2>Histórico e Progresso</h2>
       <div id="graficoSalto">
         <canvas id="jumpChart" width="300" height="200"></canvas>
@@ -37,6 +40,7 @@
     </section>
   </main>
 
+  <!-- NAVEGAÇÃO INFERIOR -->
   <nav class="bottom-nav">
     <button id="homeBtn">🏠 Home</button>
     <button id="treinosBtn">📋 Treinos</button>
@@ -44,7 +48,7 @@
     <button id="profileBtn">👤 Perfil</button>
   </nav>
 
-  <!-- Modal de Perfil -->
+  <!-- MODAL DE PERFIL -->
   <div id="profileModal" class="modal hidden">
     <div class="modal-content">
       <h2>Meu Perfil</h2>
@@ -64,6 +68,14 @@
           <option value="Líbero">Líbero</option>
         </select>
 
+        <!-- BOTÃO DE ALTERAR TEMA -->
+        <div class="theme-toggle-container">
+          <button type="button" id="toggleTheme" class="theme-toggle">
+            🌙 Alternar Tema
+          </button>
+        </div>
+
+        <!-- BOTÕES DE AÇÃO -->
         <div class="button-row">
           <button type="submit" class="btn-save">Salvar</button>
           <button type="button" id="logoutBtn" class="btn-logout">Sair</button>

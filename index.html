@@ -1,107 +1,107 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>VôleiApp v2</title>
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#5B2E8A" />
-  <link rel="stylesheet" href="app.css" />
-  <link rel="icon" sizes="192x192" href="icons/icon-192.png" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>VôleiApp v3</title>
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#5B2E8A" />
+<link rel="stylesheet" href="app.css" />
+<link rel="icon" sizes="192x192" href="icons/icon-192.png" />
 </head>
 <body>
-  <div id="app">
-    <header class="topbar">
-      <div class="brand"><img src="icons/icon-192.png" class="logoimg"> <span>VôleiApp</span></div>
-      <div class="header-actions">
-        <button id="btnProfile" class="btn small">Perfil</button>
+<div id="app">
+  <header class="topbar">
+    <div class="brand"><img src="icons/icon-192.png" class="logoimg"> <span>VôleiApp</span></div>
+    <div class="header-actions">
+      <button id="btnProfile" class="btn small">Perfil</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HOME (shows today's workout) -->
+    <section class="view" data-view="home">
+      <div class="card hero">
+        <div class="hello">Olá, <span id="userName">Atleta</span> 👋</div>
+        <div class="sub">Treino de hoje</div>
+        <div id="todayCard" class="todaycard">
+          <div class="dayNav">
+            <button id="prevDay" class="iconBtn">◀</button>
+            <div class="todayLabel"><strong id="todayName">—</strong><div id="todayWorkoutName" class="muted">—</div></div>
+            <button id="nextDay" class="iconBtn">▶</button>
+          </div>
+          <div id="exercisesList" class="exList" style="margin-top:10px"></div>
+          <div class="controls" style="margin-top:10px">
+            <button id="addExerciseToday" class="btn">Adicionar exercício</button>
+            <button id="clearToday" class="btn ghost">Limpar feitos</button>
+          </div>
+        </div>
       </div>
-    </header>
 
-    <main class="container">
-      <!-- HOME -->
-      <section class="view" data-view="home">
-        <div class="card hero">
-          <div class="hello">Olá, <span id="userName">Atleta</span> 👋</div>
-          <div class="sub">Treino de hoje</div>
-          <div id="todayCard" class="todaycard">
-            <div id="todayTitle" class="todayTitle">—</div>
-            <div id="todaySummary" class="muted">Abra a aba Treinos para editar</div>
-            <div class="controls">
-              <button id="openToday" class="btn">Ir para meu treino</button>
-              <button id="openTreinos" class="btn ghost">Editar treinos</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid">
-          <div class="card">
-            <h3>Progresso rápido</h3>
-            <canvas id="chartJump" height="120"></canvas>
-          </div>
-          <div class="card">
-            <h3>Consistência</h3>
-            <div id="consistency" class="muted">Nenhum dado ainda</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- TREINOS -->
-      <section class="view hidden" data-view="treinos">
+      <div class="grid">
         <div class="card">
-          <div class="treinos-top">
-            <h2>Treinos Semanais</h2>
-            <div class="controls">
-              <button id="addDayBtn" class="btn">Novo Dia</button>
-              <button id="importSample" class="btn ghost">Importar Exemplo</button>
-            </div>
+          <h3>Registrar Salto</h3>
+          <div class="row" style="gap:8px;align-items:center">
+            <input id="jumpInput" type="number" placeholder="cm" style="width:100px;padding:8px;border-radius:8px;border:1px solid #ddd">
+            <button id="addJump" class="btn">Adicionar</button>
+            <button id="clearJumps" class="btn ghost">Limpar</button>
           </div>
-          <div id="daysList" class="daysList"></div>
+          <div style="margin-top:12px"><canvas id="chartJump" height="160"></canvas></div>
+          <div id="jumpList" style="margin-top:8px" class="muted"></div>
         </div>
-      </section>
-
-      <!-- HISTORY -->
-      <section class="view hidden" data-view="history">
         <div class="card">
-          <h2>Histórico</h2>
-          <div id="historyList">Nenhum registro</div>
+          <h3>Resumo</h3>
+          <div id="summary" class="muted">Nenhum dado</div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- PROFILE -->
-      <section class="view hidden" data-view="profile">
-        <div class="card">
-          <h2>Perfil</h2>
-          <form id="profileForm" class="profile-grid" onsubmit="return false;">
-            <label>Nome</label><input id="inpName" placeholder="Seu nome">
-            <label>Altura (cm)</label><input id="inpHeight" type="number" min="100" max="250">
-            <label>Posição</label>
-            <select id="inpRole"><option>Ponteiro</option><option>Levantador</option><option>Oposto</option><option>Central</option><option>Libero</option></select>
-            <div style="grid-column:1 / -1; display:flex; gap:8px; margin-top:8px;">
-              <button id="saveProfile" class="btn">Salvar Perfil</button>
-              <button id="backHome" class="btn ghost">Voltar</button>
-            </div>
-          </form>
+    <!-- TREINOS full editor (optional) -->
+    <section class="view hidden" data-view="treinos">
+      <div class="card">
+        <div class="treinos-top">
+          <h2>Editor de Treinos</h2>
+          <div class="controls">
+            <button id="importSample" class="btn ghost">Importar Exemplo</button>
+          </div>
         </div>
-      </section>
-    </main>
+        <div id="daysEditor" class="daysList"></div>
+      </div>
+    </section>
 
-    <nav class="bottombar">
-      <button data-view="home" class="active">Home</button>
-      <button data-view="treinos">Treinos</button>
-      <button data-view="history">Histórico</button>
-      <button data-view="profile">Perfil</button>
-    </nav>
+    <!-- PROFILE -->
+    <section class="view hidden" data-view="profile">
+      <div class="card">
+        <h2>Perfil</h2>
+        <form id="profileForm" class="profile-grid" onsubmit="return false;">
+          <label>Nome</label><input id="inpName" placeholder="Seu nome">
+          <label>Altura (cm)</label><input id="inpHeight" type="number" min="100" max="250">
+          <label>Posição</label>
+          <select id="inpRole"><option>Ponteiro</option><option>Levantador</option><option>Oposto</option><option>Central</option><option>Libero</option></select>
+          <div style="grid-column:1 / -1; display:flex; gap:8px; margin-top:8px;">
+            <button id="saveProfile" class="btn">Salvar Perfil</button>
+            <button id="backHome" class="btn ghost">Voltar</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
 
-    <div id="toast" class="toast hidden"></div>
-  </div>
+  <nav class="bottombar">
+    <button data-view="home" class="active">Home</button>
+    <button data-view="treinos">Treinos</button>
+    <button data-view="profile">Perfil</button>
+  </nav>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="app.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js').then(()=>console.log('sw ok')).catch(e=>console.log('sw fail',e));
-    }
-  </script>
+  <div id="toast" class="toast hidden"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js').then(()=>console.log('sw ok')).catch(e=>console.log('sw fail',e));
+  }
+</script>
 </body>
 </html>

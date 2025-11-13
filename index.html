@@ -1,112 +1,76 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>VôleiApp v4</title>
-<link rel="manifest" href="manifest.json" />
-<meta name="theme-color" content="#5B2E8A" />
-<link rel="stylesheet" href="app.css" />
-<link rel="icon" sizes="192x192" href="icons/icon-192.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meu Treino de Vôlei</title>
+  <link rel="stylesheet" href="app.css" />
+  <script defer src="app.js"></script>
 </head>
 <body>
-<div id="app">
-  <header class="topbar">
-    <div class="brand"><img src="icons/icon-192.png" class="logoimg"><span>VôleiApp</span></div>
-    <div class="header-actions"><button id="btnProfile" class="btn small">Perfil</button></div>
+  <header>
+    <h1>Meu Treino</h1>
+    <p class="user-name">Atleta</p>
   </header>
 
-  <main class="container">
-    <!-- HOME (minimal) -->
-    <section class="view" data-view="home">
-      <div class="card hero">
-        <div class="hello" id="greeting">Olá, Atleta 👋</div>
-        <div class="sub muted" id="homeSubtitle">Resumo rápido</div>
-        <div class="homeGrid">
-          <div class="homeCard" id="cardToday">
-            <div class="hcTitle">Treino de hoje</div>
-            <div id="homeTodayName" class="hcMain">—</div>
-            <div id="homeTodaySub" class="muted">—</div>
-            <button id="gotoTreinos" class="btn">Ver treino</button>
-          </div>
-          <div class="homeCard" id="cardJump">
-            <div class="hcTitle">Último salto</div>
-            <div id="homeLastJump" class="hcMain">— cm</div>
-            <button id="gotoProgress" class="btn ghost">Ver progresso</button>
-          </div>
-          <div class="homeCard" id="cardQuick">
-            <div class="hcTitle">Atalhos</div>
-            <div class="hcMain">Perfil • Treinos • Progresso</div>
-            <div style="margin-top:8px"><button id="openProfileBtn" class="btn">Meu perfil</button></div>
-          </div>
+  <main id="content">
+    <section id="homeSection" class="active">
+      <h2>🏐 Bem-vindo ao seu app de treino!</h2>
+      <p>Visualize seu progresso, acompanhe seus treinos e melhore sua impulsão.</p>
+    </section>
+
+    <section id="treinosSection" class="hidden">
+      <h2>Treino da Semana</h2>
+      <div id="treinoDia">
+        <p>Hoje é <strong><span id="diaAtual"></span></strong></p>
+        <div id="treinoAtual">
+          <p>Nenhum treino cadastrado para hoje.</p>
         </div>
       </div>
     </section>
 
-    <!-- TREINOS (detailed, shows today's workout and navigation) -->
-    <section class="view hidden" data-view="treinos">
-      <div class="card">
-        <div class="dayNav top">
-          <button id="trePrev" class="iconBtn">◀</button>
-          <div><strong id="treDayName">—</strong><div id="treDayTitle" class="muted">—</div></div>
-          <button id="treNext" class="iconBtn">▶</button>
-        </div>
-        <div id="treExercises" class="exList" style="margin-top:12px"></div>
-        <div class="controls" style="margin-top:12px">
-          <button id="addEx" class="btn">+ Adicionar exercício</button>
-          <button id="importSample" class="btn ghost">Importar exemplo</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- PROGRESSO -->
-    <section class="view hidden" data-view="progress">
-      <div class="card">
-        <h3>Progresso de Salto</h3>
-        <div class="row" style="gap:8px;align-items:center">
-          <input id="jumpInput" type="number" placeholder="cm" style="width:120px;padding:8px;border-radius:8px;border:1px solid #ddd">
-          <button id="addJump" class="btn">Registrar</button>
-          <button id="clearJumps" class="btn ghost">Limpar</button>
-        </div>
-        <div style="margin-top:12px"><canvas id="chartJump" height="160"></canvas></div>
-        <div id="jumpList" style="margin-top:8px" class="muted"></div>
-      </div>
-    </section>
-
-    <!-- PROFILE -->
-    <section class="view hidden" data-view="profile">
-      <div class="card">
-        <h3>Perfil</h3>
-        <form id="profileForm" class="profile-grid" onsubmit="return false;">
-          <label>Nome</label><input id="inpName" placeholder="Seu nome">
-          <label>Altura (cm)</label><input id="inpHeight" type="number" min="100" max="250">
-          <label>Posição</label>
-          <select id="inpRole"><option>Ponteiro</option><option>Levantador</option><option>Oposto</option><option>Central</option><option>Libero</option></select>
-          <div style="grid-column:1 / -1; display:flex; gap:8px; margin-top:8px;">
-            <button id="saveProfile" class="btn">Salvar Perfil</button>
-            <button id="backHome" class="btn ghost">Voltar</button>
-          </div>
-        </form>
+    <section id="historicoSection" class="hidden">
+      <h2>Histórico e Progresso</h2>
+      <div id="graficoSalto">
+        <canvas id="jumpChart" width="300" height="200"></canvas>
       </div>
     </section>
   </main>
 
-  <nav class="bottombar">
-    <button data-view="home" class="active">Home</button>
-    <button data-view="treinos">Treinos</button>
-    <button data-view="progress">Progresso</button>
-    <button data-view="profile">Perfil</button>
+  <nav class="bottom-nav">
+    <button id="homeBtn">🏠 Home</button>
+    <button id="treinosBtn">📋 Treinos</button>
+    <button id="historicoBtn">📈 Histórico</button>
+    <button id="profileBtn">👤 Perfil</button>
   </nav>
 
-  <div id="toast" class="toast hidden"></div>
-</div>
+  <!-- Modal de Perfil -->
+  <div id="profileModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Meu Perfil</h2>
+      <form id="profileForm">
+        <label>Nome</label>
+        <input type="text" id="profileName" placeholder="Seu nome" required>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="app.js"></script>
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js').then(()=>console.log('sw ok')).catch(e=>console.log('sw fail',e));
-}
-</script>
+        <label>Altura (cm)</label>
+        <input type="number" id="profileHeight" placeholder="Ex: 180">
+
+        <label>Posição</label>
+        <select id="profilePosition">
+          <option value="Ponteiro">Ponteiro</option>
+          <option value="Oposto">Oposto</option>
+          <option value="Central">Central</option>
+          <option value="Levantador">Levantador</option>
+          <option value="Líbero">Líbero</option>
+        </select>
+
+        <div class="button-row">
+          <button type="submit" class="btn-save">Salvar</button>
+          <button type="button" id="logoutBtn" class="btn-logout">Sair</button>
+          <button type="button" id="closeProfile" class="btn-close">Fechar</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </body>
 </html>

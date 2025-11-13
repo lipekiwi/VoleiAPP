@@ -40,7 +40,7 @@ section.active {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 .bottom-nav {

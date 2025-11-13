@@ -9,9 +9,9 @@ const sections = {
 
 function showSection(section) {
   for (const key in sections) {
-    sections[key].classList.add("hidden");
+    sections[key].classList.remove("active");
   }
-  sections[section].classList.remove("hidden");
+  sections[section].classList.add("active");
 }
 
 // Botões do menu inferior
@@ -75,12 +75,6 @@ function updateHomeProfile() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadProfile();
-  updateHomeProfile();
-  mostrarDiaAtual();
-});
-
 // ===============================
 // MOSTRAR DIA DA SEMANA
 // ===============================
@@ -90,3 +84,9 @@ function mostrarDiaAtual() {
   const dia = dias[hoje.getDay()];
   document.getElementById("diaAtual").textContent = dia;
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadProfile();
+  updateHomeProfile();
+  mostrarDiaAtual();
+});

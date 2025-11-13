@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>VôleiApp — Treinos</title>
+  <title>VôleiApp v2</title>
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#5B2E8A" />
   <link rel="stylesheet" href="app.css" />
@@ -12,82 +12,85 @@
 <body>
   <div id="app">
     <header class="topbar">
-      <div class="brand"><span class="logo">🏐</span> VôleiApp</div>
-      <div>
-        <button id="openProfile" class="btn small" data-nav="profile">Perfil</button>
+      <div class="brand"><img src="icons/icon-192.png" class="logoimg"> <span>VôleiApp</span></div>
+      <div class="header-actions">
+        <button id="btnProfile" class="btn small">Perfil</button>
       </div>
     </header>
 
-    <!-- Views -->
     <main class="container">
-      <!-- HOME view -->
+      <!-- HOME -->
       <section class="view" data-view="home">
-        <section class="card" id="todayCard">
-          <h2>Meu Treino de Hoje</h2>
-          <div id="dayLabel" class="muted"></div>
-          <div id="exList"></div>
-          <div class="progressWrap"><div id="progBar" class="prog"></div></div>
-          <div class="controls"><button id="startBtn">Começar treino</button><button id="clearDay" class="btn ghost">Limpar</button></div>
-        </section>
+        <div class="card hero">
+          <div class="hello">Olá, <span id="userName">Atleta</span> 👋</div>
+          <div class="sub">Treino de hoje</div>
+          <div id="todayCard" class="todaycard">
+            <div id="todayTitle" class="todayTitle">—</div>
+            <div id="todaySummary" class="muted">Abra a aba Treinos para editar</div>
+            <div class="controls">
+              <button id="openToday" class="btn">Ir para meu treino</button>
+              <button id="openTreinos" class="btn ghost">Editar treinos</button>
+            </div>
+          </div>
+        </div>
 
-        <section class="card">
-          <h3>Calendário Semanal</h3>
-          <div id="weekGrid" class="weekgrid"></div>
-        </section>
-
-        <section class="card">
-          <h3>Progresso</h3>
-          <canvas id="chartJump" height="120"></canvas>
-          <canvas id="chartStrength" height="120" style="margin-top:8px"></canvas>
-        </section>
-
-        <section class="card">
-          <h3>Checklist Rápido</h3>
-          <div id="quickChecklist"></div>
-        </section>
+        <div class="grid">
+          <div class="card">
+            <h3>Progresso rápido</h3>
+            <canvas id="chartJump" height="120"></canvas>
+          </div>
+          <div class="card">
+            <h3>Consistência</h3>
+            <div id="consistency" class="muted">Nenhum dado ainda</div>
+          </div>
+        </div>
       </section>
 
-      <!-- HISTORY view -->
+      <!-- TREINOS -->
+      <section class="view hidden" data-view="treinos">
+        <div class="card">
+          <div class="treinos-top">
+            <h2>Treinos Semanais</h2>
+            <div class="controls">
+              <button id="addDayBtn" class="btn">Novo Dia</button>
+              <button id="importSample" class="btn ghost">Importar Exemplo</button>
+            </div>
+          </div>
+          <div id="daysList" class="daysList"></div>
+        </div>
+      </section>
+
+      <!-- HISTORY -->
       <section class="view hidden" data-view="history">
-        <section class="card">
-          <h2>Histórico de Treinos</h2>
-          <div id="historyList" class="muted">Nenhum treino registrado ainda.</div>
-        </section>
+        <div class="card">
+          <h2>Histórico</h2>
+          <div id="historyList">Nenhum registro</div>
+        </div>
       </section>
 
-      <!-- PROFILE view -->
+      <!-- PROFILE -->
       <section class="view hidden" data-view="profile">
-        <section class="card">
+        <div class="card">
           <h2>Perfil</h2>
           <form id="profileForm" class="profile-grid" onsubmit="return false;">
-            <label for="inpName">Nome</label>
-            <input id="inpName" placeholder="Seu nome" />
-
-            <label for="inpHeight">Altura (cm)</label>
-            <input id="inpHeight" type="number" min="100" max="250" />
-
-            <label for="inpRole">Posição</label>
-            <select id="inpRole">
-              <option>Ponteiro</option>
-              <option>Levantador</option>
-              <option>Oposto</option>
-              <option>Central</option>
-              <option>Libero</option>
-            </select>
-
+            <label>Nome</label><input id="inpName" placeholder="Seu nome">
+            <label>Altura (cm)</label><input id="inpHeight" type="number" min="100" max="250">
+            <label>Posição</label>
+            <select id="inpRole"><option>Ponteiro</option><option>Levantador</option><option>Oposto</option><option>Central</option><option>Libero</option></select>
             <div style="grid-column:1 / -1; display:flex; gap:8px; margin-top:8px;">
-              <button id="saveProfile" class="btn">Salvar</button>
-              <button id="cancelProfile" class="btn ghost">Cancelar</button>
+              <button id="saveProfile" class="btn">Salvar Perfil</button>
+              <button id="backHome" class="btn ghost">Voltar</button>
             </div>
           </form>
-        </section>
+        </div>
       </section>
     </main>
 
     <nav class="bottombar">
-      <button data-view-btn="home" class="active">Home</button>
-      <button data-view-btn="history">Histórico</button>
-      <button data-view-btn="profile">Perfil</button>
+      <button data-view="home" class="active">Home</button>
+      <button data-view="treinos">Treinos</button>
+      <button data-view="history">Histórico</button>
+      <button data-view="profile">Perfil</button>
     </nav>
 
     <div id="toast" class="toast hidden"></div>

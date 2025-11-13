@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>VôleiApp v3</title>
+<title>VôleiApp v4</title>
 <link rel="manifest" href="manifest.json" />
 <meta name="theme-color" content="#5B2E8A" />
 <link rel="stylesheet" href="app.css" />
@@ -12,67 +12,71 @@
 <body>
 <div id="app">
   <header class="topbar">
-    <div class="brand"><img src="icons/icon-192.png" class="logoimg"> <span>VôleiApp</span></div>
-    <div class="header-actions">
-      <button id="btnProfile" class="btn small">Perfil</button>
-    </div>
+    <div class="brand"><img src="icons/icon-192.png" class="logoimg"><span>VôleiApp</span></div>
+    <div class="header-actions"><button id="btnProfile" class="btn small">Perfil</button></div>
   </header>
 
   <main class="container">
-    <!-- HOME (shows today's workout) -->
+    <!-- HOME (minimal) -->
     <section class="view" data-view="home">
       <div class="card hero">
-        <div class="hello">Olá, <span id="userName">Atleta</span> 👋</div>
-        <div class="sub">Treino de hoje</div>
-        <div id="todayCard" class="todaycard">
-          <div class="dayNav">
-            <button id="prevDay" class="iconBtn">◀</button>
-            <div class="todayLabel"><strong id="todayName">—</strong><div id="todayWorkoutName" class="muted">—</div></div>
-            <button id="nextDay" class="iconBtn">▶</button>
+        <div class="hello" id="greeting">Olá, Atleta 👋</div>
+        <div class="sub muted" id="homeSubtitle">Resumo rápido</div>
+        <div class="homeGrid">
+          <div class="homeCard" id="cardToday">
+            <div class="hcTitle">Treino de hoje</div>
+            <div id="homeTodayName" class="hcMain">—</div>
+            <div id="homeTodaySub" class="muted">—</div>
+            <button id="gotoTreinos" class="btn">Ver treino</button>
           </div>
-          <div id="exercisesList" class="exList" style="margin-top:10px"></div>
-          <div class="controls" style="margin-top:10px">
-            <button id="addExerciseToday" class="btn">Adicionar exercício</button>
-            <button id="clearToday" class="btn ghost">Limpar feitos</button>
+          <div class="homeCard" id="cardJump">
+            <div class="hcTitle">Último salto</div>
+            <div id="homeLastJump" class="hcMain">— cm</div>
+            <button id="gotoProgress" class="btn ghost">Ver progresso</button>
           </div>
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="card">
-          <h3>Registrar Salto</h3>
-          <div class="row" style="gap:8px;align-items:center">
-            <input id="jumpInput" type="number" placeholder="cm" style="width:100px;padding:8px;border-radius:8px;border:1px solid #ddd">
-            <button id="addJump" class="btn">Adicionar</button>
-            <button id="clearJumps" class="btn ghost">Limpar</button>
+          <div class="homeCard" id="cardQuick">
+            <div class="hcTitle">Atalhos</div>
+            <div class="hcMain">Perfil • Treinos • Progresso</div>
+            <div style="margin-top:8px"><button id="openProfileBtn" class="btn">Meu perfil</button></div>
           </div>
-          <div style="margin-top:12px"><canvas id="chartJump" height="160"></canvas></div>
-          <div id="jumpList" style="margin-top:8px" class="muted"></div>
-        </div>
-        <div class="card">
-          <h3>Resumo</h3>
-          <div id="summary" class="muted">Nenhum dado</div>
         </div>
       </div>
     </section>
 
-    <!-- TREINOS full editor (optional) -->
+    <!-- TREINOS (detailed, shows today's workout and navigation) -->
     <section class="view hidden" data-view="treinos">
       <div class="card">
-        <div class="treinos-top">
-          <h2>Editor de Treinos</h2>
-          <div class="controls">
-            <button id="importSample" class="btn ghost">Importar Exemplo</button>
-          </div>
+        <div class="dayNav top">
+          <button id="trePrev" class="iconBtn">◀</button>
+          <div><strong id="treDayName">—</strong><div id="treDayTitle" class="muted">—</div></div>
+          <button id="treNext" class="iconBtn">▶</button>
         </div>
-        <div id="daysEditor" class="daysList"></div>
+        <div id="treExercises" class="exList" style="margin-top:12px"></div>
+        <div class="controls" style="margin-top:12px">
+          <button id="addEx" class="btn">+ Adicionar exercício</button>
+          <button id="importSample" class="btn ghost">Importar exemplo</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROGRESSO -->
+    <section class="view hidden" data-view="progress">
+      <div class="card">
+        <h3>Progresso de Salto</h3>
+        <div class="row" style="gap:8px;align-items:center">
+          <input id="jumpInput" type="number" placeholder="cm" style="width:120px;padding:8px;border-radius:8px;border:1px solid #ddd">
+          <button id="addJump" class="btn">Registrar</button>
+          <button id="clearJumps" class="btn ghost">Limpar</button>
+        </div>
+        <div style="margin-top:12px"><canvas id="chartJump" height="160"></canvas></div>
+        <div id="jumpList" style="margin-top:8px" class="muted"></div>
       </div>
     </section>
 
     <!-- PROFILE -->
     <section class="view hidden" data-view="profile">
       <div class="card">
-        <h2>Perfil</h2>
+        <h3>Perfil</h3>
         <form id="profileForm" class="profile-grid" onsubmit="return false;">
           <label>Nome</label><input id="inpName" placeholder="Seu nome">
           <label>Altura (cm)</label><input id="inpHeight" type="number" min="100" max="250">
@@ -90,6 +94,7 @@
   <nav class="bottombar">
     <button data-view="home" class="active">Home</button>
     <button data-view="treinos">Treinos</button>
+    <button data-view="progress">Progresso</button>
     <button data-view="profile">Perfil</button>
   </nav>
 
@@ -99,9 +104,9 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="app.js"></script>
 <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js').then(()=>console.log('sw ok')).catch(e=>console.log('sw fail',e));
-  }
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js').then(()=>console.log('sw ok')).catch(e=>console.log('sw fail',e));
+}
 </script>
 </body>
 </html>

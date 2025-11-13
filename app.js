@@ -1,5 +1,5 @@
+// App logic with view navigation and improved profile handling
 
-// Simple PWA Training App logic
 const WEEK_TEMPLATE = {
   "Segunda": ["Box Jumps - 5x4","Approach Jump - 4x3","RDL - 4x6","Hip Thrust - 4x5"],
   "Terça": ["Pelada (descanso ativo)"],
@@ -17,6 +17,29 @@ function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
 
 load();
 
+// --- view navigation ---
+const views = document.querySelectorAll('.view');
+const navButtons = document.querySelectorAll('[data-view-btn]');
+function showView(name){
+  views.forEach(v => {
+    if(v.dataset.view === name) v.classList.remove('hidden');
+    else v.classList.add('hidden');
+  });
+  navButtons.forEach(b => b.classList.toggle('active', b.dataset.viewBtn === name));
+  // extra: update content when entering certain views
+  if(name === 'home') { renderWeek(); openDay(todayName()); renderQuick(); buildCharts(); }
+  if(name === 'history') { renderHistory(); }
+  if(name === 'profile') { fillProfileForm(); }
+}
+navButtons.forEach(b => b.addEventListener('click', ()=> showView(b.dataset.viewBtn)));
+document.querySelectorAll('[data-nav]').forEach(btn => btn.addEventListener('click', (e)=>{
+  const v = e.currentTarget.dataset.nav;
+  showView(v);
+}));
+
+// default view
+showView('home');
+
 // UI elements
 const dayLabel = document.getElementById('dayLabel');
 const exList = document.getElementById('exList');
@@ -33,7 +56,7 @@ function renderWeek(){
     const div = document.createElement('div'); div.className='day';
     if(state.completed[k]) div.classList.add('done');
     div.innerHTML = `<strong>${k}</strong><div class="muted">${WEEK_TEMPLATE[k].slice(0,2).join(', ')}</div>`;
-    div.onclick = ()=>{ openDay(k); };
+    div.onclick = ()=>{ openDay(k); showView('home'); };
     weekGrid.appendChild(div);
   }
 }
@@ -65,16 +88,28 @@ function updateProgress(day){
   progBar.style.width = percent+'%';
 }
 
-document.getElementById('startBtn').addEventListener('click', ()=>{ openDay(todayName()); });
+document.getElementById('startBtn').addEventListener('click', ()=>{ openDay(todayName()); showView('home'); });
 document.getElementById('clearDay').addEventListener('click', ()=>{
   const d = todayName();
   delete state.completed[d]; save(); openDay(d); renderWeek(); showToast('Limpo');
 });
 
-// profile
-document.getElementById('openProfile').addEventListener('click', ()=>{ document.getElementById('profileModal').classList.remove('hidden'); document.getElementById('inpName').value = state.profile.name||''; document.getElementById('inpHeight').value = state.profile.height||''; });
-document.getElementById('closeProfile').addEventListener('click', ()=>{ document.getElementById('profileModal').classList.add('hidden'); });
-document.getElementById('saveProfile').addEventListener('click', ()=>{ state.profile.name = document.getElementById('inpName').value; state.profile.height = document.getElementById('inpHeight').value; save(); document.getElementById('profileModal').classList.add('hidden'); showToast('Perfil salvo'); });
+// profile form
+const inpName = document.getElementById('inpName');
+const inpHeight = document.getElementById('inpHeight');
+const inpRole = document.getElementById('inpRole');
+function fillProfileForm(){
+  inpName.value = state.profile.name || '';
+  inpHeight.value = state.profile.height || '';
+  inpRole.value = state.profile.role || 'Ponteiro';
+}
+document.getElementById('saveProfile').addEventListener('click', ()=>{
+  state.profile.name = inpName.value.trim();
+  state.profile.height = inpHeight.value ? Number(inpHeight.value) : '';
+  state.profile.role = inpRole.value;
+  save(); showToast('Perfil salvo'); showView('home');
+});
+document.getElementById('cancelProfile').addEventListener('click', ()=> showView('home'));
 
 // quick checklist (home)
 function renderQuick(){
@@ -99,14 +134,30 @@ function buildCharts(){
   window._cs = new Chart(chartStrengthCtx,{type:'line',data:{labels,datasets:[{label:'RDL',data:rdl,fill:false,borderColor:'rgba(255,180,0,0.9)'}]},options:{responsive:true}});
 }
 
-function showToast(t){ const el = document.getElementById('toast'); el.textContent = t; el.classList.remove('hidden'); setTimeout(()=>el.classList.add('hidden'),1500); }
+// history view
+function renderHistory(){
+  const el = document.getElementById('historyList');
+  if(!state.records || state.records.length===0) { el.textContent = 'Nenhum treino registrado ainda.'; return; }
+  el.innerHTML = '';
+  state.records.slice().reverse().forEach(r=>{
+    const d = document.createElement('div');
+    d.className='card';
+    d.style.marginBottom='8px';
+    d.innerHTML = `<strong>${r.d}</strong><div class="muted">Salto: ${r.jump} cm — RDL: ${r.rdl} kg</div>`;
+    el.appendChild(d);
+  });
+}
 
-// sample data utility if empty
+// toast
+function showToast(t){ const el = document.getElementById('toast'); el.textContent = t; el.classList.remove('hidden'); setTimeout(()=>el.classList.add('hidden'),1400); }
+
+// sample records if empty
 if(!state.records || state.records.length===0){
   state.records = [{d:new Date().toISOString().slice(0,10), jump:48, rdl:115}];
   save();
 }
 
+// initial render
 renderWeek();
 openDay(todayName());
 renderQuick();

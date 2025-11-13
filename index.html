@@ -3,94 +3,225 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VoleiAPP 🏐</title>
-
-  <!-- Estilo principal -->
+  <meta name="description" content="VoleiAPP - Gerencie seus treinos de vôlei e acompanhe seu progresso" />
+  <meta name="theme-color" content="#1c2541" />
+  <title>VoleiAPP - Treino de Vôlei</title>
   <link rel="stylesheet" href="app.css" />
-
-  <!-- Script principal -->
+  <link rel="manifest" href="manifest.json" />
   <script defer src="app.js"></script>
 </head>
 <body>
-  <!-- TOPO -->
-  <header class="app-header">
-    <div class="header-content">
-      <h1 class="app-title">VoleiAPP</h1>
-      <div class="user-info">
-        <p class="user-name">Atleta</p>
-        <button id="profileBtn" class="icon-btn" aria-label="Perfil">
-          👤
-        </button>
-      </div>
-    </div>
+  <header>
+    <h1>Meu Treino</h1>
+    <p class="user-name">Atleta</p>
   </header>
 
-  <!-- CONTEÚDO PRINCIPAL -->
-  <main id="content" class="app-main">
-
-    <!-- HOME -->
-    <section id="homeSection" class="page-section active">
-      <div class="welcome-card fade-in">
-        <h2>🏐 Bem-vindo(a)!</h2>
-        <p>Gerencie seus treinos, acompanhe seu progresso e eleve seu jogo ao próximo nível.</p>
+  <main id="content">
+    <!-- HOME SECTION -->
+    <section id="homeSection" class="active" aria-label="Página inicial">
+      <div class="welcome-message">
+        <h2>🏐 Bem-vindo, <span id="welcomeName">Atleta</span>!</h2>
+        <p>Continue treinando forte e alcance seus objetivos!</p>
       </div>
 
       <div class="stats-grid">
         <div class="stat-card">
-          <h3>🏋️ Treinos Feitos</h3>
-          <p id="statTreinos">12</p>
+          <div class="icon">📅</div>
+          <div class="value" id="statWeeklyTrainings">0</div>
+          <div class="label">Treinos na Semana</div>
         </div>
         <div class="stat-card">
-          <h3>📈 Melhor Salto</h3>
-          <p id="statSalto">62 cm</p>
+          <div class="icon">🔥</div>
+          <div class="value" id="statStreak">0</div>
+          <div class="label">Dias Seguidos</div>
         </div>
         <div class="stat-card">
-          <h3>🔥 Sequência</h3>
-          <p id="statDias">5 dias</p>
+          <div class="icon">📈</div>
+          <div class="value" id="statBestJump">--</div>
+          <div class="label">Melhor Salto</div>
         </div>
       </div>
     </section>
 
-    <!-- TREINOS -->
-    <section id="treinosSection" class="page-section hidden">
-      <h2>Treino da Semana</h2>
-      <div class="treino-dia">
-        <p>Hoje é <strong><span id="diaAtual"></span></strong></p>
-        <div id="treinoAtual" class="treino-box">
-          <p>Nenhum treino cadastrado para hoje.</p>
+    <!-- TRAINING SECTION -->
+    <section id="treinosSection" aria-label="Treinos">
+      <h2>Treinos da Semana</h2>
+
+      <div class="day-selector" id="daySelector">
+        <button class="day-btn" data-day="0">Dom</button>
+        <button class="day-btn" data-day="1">Seg</button>
+        <button class="day-btn" data-day="2">Ter</button>
+        <button class="day-btn" data-day="3">Qua</button>
+        <button class="day-btn" data-day="4">Qui</button>
+        <button class="day-btn" data-day="5">Sex</button>
+        <button class="day-btn" data-day="6">Sáb</button>
+      </div>
+
+      <div id="currentDayName" style="text-align: center; margin-bottom: 1rem; color: var(--text-secondary);">
+        <strong><span id="selectedDayName"></span></strong>
+      </div>
+
+      <div id="exercisesList" class="exercises-list">
+        <!-- Exercises will be rendered here -->
+      </div>
+
+      <button class="add-exercise-btn" id="addExerciseBtn">
+        ➕ Adicionar Exercício
+      </button>
+
+      <!-- Exercise Form (hidden by default) -->
+      <div id="exerciseForm" class="exercise-form" style="display: none;">
+        <h3 id="formTitle">Novo Exercício</h3>
+        <form id="exerciseFormElement">
+          <div class="form-group">
+            <label for="exerciseName">Nome do Exercício</label>
+            <input type="text" id="exerciseName" placeholder="Ex: Agachamento" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="exerciseSets">Séries</label>
+              <input type="number" id="exerciseSets" placeholder="3" min="1" required />
+            </div>
+            <div class="form-group">
+              <label for="exerciseReps">Repetições</label>
+              <input type="number" id="exerciseReps" placeholder="12" min="1" required />
+            </div>
+            <div class="form-group">
+              <label for="exerciseWeight">Carga (kg)</label>
+              <input type="number" id="exerciseWeight" placeholder="20" min="0" step="0.5" />
+            </div>
+          </div>
+          <div class="button-row">
+            <button type="submit" class="btn-save">Salvar</button>
+            <button type="button" class="btn-close" id="cancelExerciseBtn">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- HISTORY SECTION -->
+    <section id="historicoSection" aria-label="Histórico">
+      <h2>📊 Histórico de Saltos</h2>
+
+      <!-- Add Jump Record Form -->
+      <div class="jump-form-card">
+        <h3>Registrar Novo Salto</h3>
+        <form id="jumpForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="jumpHeight">Altura do Salto (cm)</label>
+              <input
+                type="number"
+                id="jumpHeight"
+                placeholder="Ex: 75"
+                min="0"
+                max="200"
+                step="0.5"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="jumpDate">Data</label>
+              <input
+                type="date"
+                id="jumpDate"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="jumpNotes">Observações (opcional)</label>
+            <input
+              type="text"
+              id="jumpNotes"
+              placeholder="Ex: Após aquecimento completo"
+              maxlength="100"
+            />
+          </div>
+          <button type="submit" class="btn-save" style="width: 100%;">
+            ➕ Adicionar Registro
+          </button>
+        </form>
+      </div>
+
+      <!-- Jump Records List -->
+      <div class="jump-records-section">
+        <div class="section-header">
+          <h3>Seus Registros</h3>
+          <div class="best-jump-badge" id="bestJumpBadge">
+            🏆 Melhor: <span id="bestJumpValue">--</span> cm
+          </div>
+        </div>
+
+        <div id="jumpRecordsList" class="jump-records-list">
+          <!-- Jump records will be rendered here -->
         </div>
       </div>
-      <button id="addTreinoBtn" class="btn-primary">➕ Adicionar Treino</button>
-    </section>
 
-    <!-- HISTÓRICO -->
-    <section id="historicoSection" class="page-section hidden">
-      <h2>Histórico e Progresso</h2>
-      <canvas id="jumpChart" width="320" height="200"></canvas>
+      <!-- Simple Chart Visualization -->
+      <div id="graficoSalto" style="margin-top: 2rem;">
+        <h3 style="margin-bottom: 1rem; text-align: center;">Evolução dos Saltos</h3>
+        <canvas id="jumpChart" width="300" height="200" aria-label="Gráfico de progresso de saltos"></canvas>
+      </div>
     </section>
-
   </main>
 
-  <!-- RODAPÉ / NAVEGAÇÃO -->
-  <nav class="bottom-nav">
-    <button id="homeBtn" class="nav-btn active">🏠<span>Home</span></button>
-    <button id="treinosBtn" class="nav-btn">📋<span>Treinos</span></button>
-    <button id="historicoBtn" class="nav-btn">📈<span>Histórico</span></button>
+  <nav class="bottom-nav" aria-label="Navegação principal">
+    <button id="homeBtn" class="active" aria-label="Ir para Home" data-section="home">
+      🏠 Home
+    </button>
+    <button id="treinosBtn" aria-label="Ir para Treinos" data-section="treinos">
+      📋 Treinos
+    </button>
+    <button id="historicoBtn" aria-label="Ir para Histórico" data-section="historico">
+      📈 Histórico
+    </button>
+    <button id="profileBtn" aria-label="Abrir Perfil" data-section="profile">
+      👤 Perfil
+    </button>
   </nav>
 
-  <!-- MODAL DE PERFIL -->
-  <div id="profileModal" class="modal hidden">
-    <div class="modal-content slide-up">
-      <h2>Meu Perfil</h2>
-      <form id="profileForm">
-        <label>Nome</label>
-        <input type="text" id="profileName" placeholder="Seu nome" required>
+  <!-- Modal de Perfil -->
+  <div id="profileModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
+    <div class="modal-content">
+      <h2 id="profileTitle">Meu Perfil</h2>
+      <form id="profileForm" novalidate>
+        <!-- Theme Toggle -->
+        <div class="theme-toggle-wrapper">
+          <label for="themeToggle">
+            <span id="themeLabel">Modo Escuro</span>
+          </label>
+          <label class="theme-switch">
+            <input type="checkbox" id="themeToggle" />
+            <span class="theme-slider"></span>
+          </label>
+        </div>
 
-        <label>Altura (cm)</label>
-        <input type="number" id="profileHeight" placeholder="Ex: 180">
+        <label for="profileName">Nome</label>
+        <input
+          type="text"
+          id="profileName"
+          name="name"
+          placeholder="Seu nome"
+          required
+          minlength="2"
+          maxlength="50"
+          autocomplete="name"
+        />
 
-        <label>Posição</label>
-        <select id="profilePosition">
+        <label for="profileHeight">Altura (cm)</label>
+        <input
+          type="number"
+          id="profileHeight"
+          name="height"
+          placeholder="Ex: 180"
+          min="100"
+          max="250"
+          step="1"
+        />
+
+        <label for="profilePosition">Posição</label>
+        <select id="profilePosition" name="position">
           <option value="Ponteiro">Ponteiro</option>
           <option value="Oposto">Oposto</option>
           <option value="Central">Central</option>
@@ -98,14 +229,6 @@
           <option value="Líbero">Líbero</option>
         </select>
 
-        <!-- ALTERAR TEMA -->
-        <div class="theme-toggle-container">
-          <button type="button" id="toggleTheme" class="theme-toggle">
-            🌙 Alternar Tema
-          </button>
-        </div>
-
-        <!-- AÇÕES -->
         <div class="button-row">
           <button type="submit" class="btn-save">Salvar</button>
           <button type="button" id="logoutBtn" class="btn-logout">Sair</button>
@@ -114,5 +237,8 @@
       </form>
     </div>
   </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 </body>
 </html>

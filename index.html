@@ -13,52 +13,82 @@
   <div id="app">
     <header class="topbar">
       <div class="brand"><span class="logo">🏐</span> VôleiApp</div>
-      <button id="openProfile" class="btn small">Perfil</button>
+      <div>
+        <button id="openProfile" class="btn small" data-nav="profile">Perfil</button>
+      </div>
     </header>
 
+    <!-- Views -->
     <main class="container">
-      <section class="card" id="todayCard">
-        <h2>Meu Treino de Hoje</h2>
-        <div id="dayLabel" class="muted"></div>
-        <div id="exList"></div>
-        <div class="progressWrap"><div id="progBar" class="prog"></div></div>
-        <div class="controls"><button id="startBtn">Começar treino</button>
-        <button id="clearDay" class="btn ghost">Limpar</button></div>
+      <!-- HOME view -->
+      <section class="view" data-view="home">
+        <section class="card" id="todayCard">
+          <h2>Meu Treino de Hoje</h2>
+          <div id="dayLabel" class="muted"></div>
+          <div id="exList"></div>
+          <div class="progressWrap"><div id="progBar" class="prog"></div></div>
+          <div class="controls"><button id="startBtn">Começar treino</button><button id="clearDay" class="btn ghost">Limpar</button></div>
+        </section>
+
+        <section class="card">
+          <h3>Calendário Semanal</h3>
+          <div id="weekGrid" class="weekgrid"></div>
+        </section>
+
+        <section class="card">
+          <h3>Progresso</h3>
+          <canvas id="chartJump" height="120"></canvas>
+          <canvas id="chartStrength" height="120" style="margin-top:8px"></canvas>
+        </section>
+
+        <section class="card">
+          <h3>Checklist Rápido</h3>
+          <div id="quickChecklist"></div>
+        </section>
       </section>
 
-      <section class="card">
-        <h3>Calendário Semanal</h3>
-        <div id="weekGrid" class="weekgrid"></div>
+      <!-- HISTORY view -->
+      <section class="view hidden" data-view="history">
+        <section class="card">
+          <h2>Histórico de Treinos</h2>
+          <div id="historyList" class="muted">Nenhum treino registrado ainda.</div>
+        </section>
       </section>
 
-      <section class="card">
-        <h3>Progresso</h3>
-        <canvas id="chartJump" height="120"></canvas>
-        <canvas id="chartStrength" height="120" style="margin-top:8px"></canvas>
-      </section>
+      <!-- PROFILE view -->
+      <section class="view hidden" data-view="profile">
+        <section class="card">
+          <h2>Perfil</h2>
+          <form id="profileForm" class="profile-grid" onsubmit="return false;">
+            <label for="inpName">Nome</label>
+            <input id="inpName" placeholder="Seu nome" />
 
-      <section class="card">
-        <h3>Checklist Rápido</h3>
-        <div id="quickChecklist"></div>
+            <label for="inpHeight">Altura (cm)</label>
+            <input id="inpHeight" type="number" min="100" max="250" />
+
+            <label for="inpRole">Posição</label>
+            <select id="inpRole">
+              <option>Ponteiro</option>
+              <option>Levantador</option>
+              <option>Oposto</option>
+              <option>Central</option>
+              <option>Libero</option>
+            </select>
+
+            <div style="grid-column:1 / -1; display:flex; gap:8px; margin-top:8px;">
+              <button id="saveProfile" class="btn">Salvar</button>
+              <button id="cancelProfile" class="btn ghost">Cancelar</button>
+            </div>
+          </form>
+        </section>
       </section>
     </main>
 
     <nav class="bottombar">
-      <button data-view="home" class="active">Home</button>
-      <button data-view="history">Histórico</button>
-      <button data-view="profile">Perfil</button>
+      <button data-view-btn="home" class="active">Home</button>
+      <button data-view-btn="history">Histórico</button>
+      <button data-view-btn="profile">Perfil</button>
     </nav>
-
-    <!-- Modals / hidden pages -->
-    <div id="profileModal" class="modal hidden">
-      <div class="modalCard">
-        <h3>Perfil</h3>
-        <label>Nome <input id="inpName" placeholder="Seu nome"></label>
-        <label>Altura (cm) <input id="inpHeight" type="number"></label>
-        <label>Posição <input id="inpRole" value="Ponteiro"></label>
-        <div class="controls"><button id="saveProfile">Salvar</button><button id="closeProfile" class="btn ghost">Fechar</button></div>
-      </div>
-    </div>
 
     <div id="toast" class="toast hidden"></div>
   </div>

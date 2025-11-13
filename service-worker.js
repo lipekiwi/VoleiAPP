@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'volei-app-v2-cache-v1';
+const CACHE_NAME = 'volei-app-v3-cache-v1';
 const FILES = ['./index.html','./app.css','./app.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install', evt => { evt.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(FILES))); self.skipWaiting(); });
 self.addEventListener('activate', evt => { evt.waitUntil(caches.keys().then(keys => Promise.all(keys.map(k=> k !== CACHE_NAME ? caches.delete(k) : Promise.resolve())))); self.clients.claim(); });

@@ -90,3 +90,33 @@ document.addEventListener("DOMContentLoaded", () => {
   updateHomeProfile();
   mostrarDiaAtual();
 });
+
+// ===============================
+// TEMA CLARO/ESCURO
+// ===============================
+const themeToggle = document.getElementById("toggleTheme");
+
+function loadTheme() {
+  const savedTheme = localStorage.getItem("theme") || "light";
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark-mode");
+  }
+}
+
+function toggleTheme() {
+  document.body.classList.toggle("dark-mode");
+  const isDark = document.body.classList.contains("dark-mode");
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+  themeToggle.textContent = isDark ? "☀️ Modo Claro" : "🌙 Modo Escuro";
+}
+
+if (themeToggle) {
+  themeToggle.addEventListener("click", toggleTheme);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadTheme();
+  updateHomeProfile();
+  mostrarDiaAtual();
+});
+
